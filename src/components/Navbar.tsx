@@ -1,9 +1,13 @@
 import { Button, Container, Nav, Navbar as Navbarbs } from "react-bootstrap";
 import { Link, NavLink } from "react-router-dom";
+import { useAuth } from "../context/auth-context";
 import { useShoppingCart } from "../context/ShoppingCartContext";
 
 function Navbar() {
   const { cartQuantity, openCart } = useShoppingCart();
+  const { user, signOut } = useAuth();
+  const { setCartItems } = useShoppingCart();
+
   return (
     <Navbarbs sticky="top" className="bg-white shadow-sm mb-4" expand="lg">
       <Container>
@@ -18,11 +22,24 @@ function Navbar() {
             About
           </Nav.Link>
         </Nav>
-        <Link to={"/signin"}>
-          <Button variant="primary" className="rounded p-2 me-4">
-            Sign In
+        {user ? (
+          <Button
+            variant="primary"
+            className="rounded p-2 me-4"
+            onClick={() => {
+              signOut();
+              setCartItems([]);
+            }}
+          >
+            Log Out
           </Button>
-        </Link>
+        ) : (
+          <Link to={"/signin"}>
+            <Button variant="primary" className="rounded p-2 me-4">
+              Sign In
+            </Button>
+          </Link>
+        )}
         {cartQuantity > 0 && (
           <Button
             className="rounded-circle"

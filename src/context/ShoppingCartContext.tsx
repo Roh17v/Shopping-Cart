@@ -2,6 +2,7 @@ import { ReactNode, createContext, useContext, useState } from "react";
 import CartItem from "../components/CartItem";
 import ShoppingCart from "../components/ShoppingCart";
 import { useLocalStorage } from "../hooks/useLocalStorage";
+import { useAuth } from "./auth-context";
 
 type ShoppingCartProviderProps = {
   children: ReactNode;
@@ -16,6 +17,7 @@ type ShoppingCartContext = {
   cartQuantity: number;
   openCart: () => void;
   closeCart: () => void;
+  setCartItems: React.Dispatch<React.SetStateAction<CartItem[]>>
 };
 
 type CartItem = {
@@ -36,11 +38,17 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
   );
   const [isOpen, setIsopen] = useState(false);
 
+  const { user } = useAuth();
+
   function getItemQuantity(id: number) {
     return cartItems.find((currItem) => currItem.id == id)?.quantity || 0;
   }
 
   function incrementItemQuantity(id: number) {
+    if (!user) {
+      alert("you must be signed in before you can add items to cart");
+      return;
+    }
     setCartItems((currItem) => {
       if (currItem.find((item) => item.id === id) == null) {
         return [...currItem, { id, quantity: 1 }];
@@ -54,6 +62,10 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
   }
 
   function decrementItemQuantity(id: number) {
+    if (!user) {
+      alert("you must be signed in before you can add items to cart");
+      return;
+    }
     setCartItems((currItem) => {
       if (currItem.find((item) => item.id === id) == null) {
         return currItem.filter((item) => item.id !== id);
@@ -67,6 +79,10 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
   }
 
   function removeFromCart(id: number) {
+    if (!user) {
+      alert("you must be signed in before you can add items to cart");
+      return;
+    }
     setCartItems((currItem) => {
       return currItem.filter((item) => item.id !== id);
     });
@@ -89,6 +105,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
         cartQuantity,
         closeCart,
         openCart,
+        setCartItems
       }}
     >
       {children}
