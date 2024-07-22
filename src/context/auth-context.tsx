@@ -2,6 +2,7 @@ import {
   signOut as firebaseSignOut,
   onAuthStateChanged,
   signInWithEmailAndPassword,
+  signInWithPopup,
   User,
 } from "firebase/auth";
 import React, {
@@ -11,13 +12,14 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { auth } from "../firebase/firebase-config"; // Import the auth instance
+import { auth, googleProvider } from "../firebase/firebase-config"; // Import the auth instance
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
+  signInWithGoogle: () => Promise<void>;
 }
 
 interface AuthProviderProps {
@@ -48,8 +50,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setUser(null);
   };
 
+  const signInWithGoogle = async () => {
+    await signInWithPopup(auth, googleProvider); // Use imported method
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, signIn, signOut }}>
+    <AuthContext.Provider
+      value={{ user, loading, signIn, signOut, signInWithGoogle }}
+    >
       {children}
     </AuthContext.Provider>
   );

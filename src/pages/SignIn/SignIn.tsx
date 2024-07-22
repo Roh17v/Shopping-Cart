@@ -1,8 +1,10 @@
 // src/components/SignIn.tsx
 
 import React, { useState } from "react";
+import { Button } from "react-bootstrap";
+import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
-import { signIn } from "../../firebase/firebase-auth";
+import { useAuth } from "../../context/auth-context";
 
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -10,6 +12,7 @@ const SignIn: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { signIn, signInWithGoogle } = useAuth();
 
   const handleSignIn = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -30,11 +33,20 @@ const SignIn: React.FC = () => {
     }
   };
 
+  const handleGoogleSignIn = async () => {
+    try {
+      await signInWithGoogle();
+      navigate("/store");
+    } catch (error: any) {
+      setError(error.message);
+    }
+  };
+
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
         <div className="col-md-6">
-          <div className="card">
+          <div className="card shadow-sm">
             <div className="card-body">
               <h1 className="card-title text-center mb-4">Sign In</h1>
               <form onSubmit={handleSignIn}>
@@ -78,8 +90,16 @@ const SignIn: React.FC = () => {
                   Sign In
                 </button>
               </form>
-              <div className="mt-2">
-                Don't have an account <Link to={"/signup"}>SignUp</Link>
+              <Button
+                onClick={handleGoogleSignIn}
+                className="btn mt-3 d-flex align-items-center justify-content-center"
+                style={{ width: "100%" }}
+              >
+                <FcGoogle size={24} className="me-2" />
+                Sign In with Google
+              </Button>
+              <div className="mt-3 text-center">
+                Don't have an account? <Link to="/signup">Sign Up</Link>
               </div>
             </div>
           </div>

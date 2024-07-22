@@ -22,27 +22,9 @@ function Navbar() {
             About
           </Nav.Link>
         </Nav>
-        {user ? (
-          <Button
-            variant="primary"
-            className="rounded p-2 me-4"
-            onClick={() => {
-              signOut();
-              setCartItems([]);
-            }}
-          >
-            Log Out
-          </Button>
-        ) : (
-          <Link to={"/signin"}>
-            <Button variant="primary" className="rounded p-2 me-4">
-              Sign In
-            </Button>
-          </Link>
-        )}
         {cartQuantity > 0 && (
           <Button
-            className="rounded-circle"
+            className="rounded-circle me-4"
             variant="outline-primary"
             style={{ height: "3rem", width: "3rem", position: "relative" }}
             onClick={openCart}
@@ -69,6 +51,24 @@ function Navbar() {
               {cartQuantity}
             </div>
           </Button>
+        )}
+        {user ? (
+          <Button
+            variant="primary"
+            className="rounded p-2"
+            onClick={() => {
+              signOut();
+              setCartItems([]);
+            }}
+          >
+            Log Out
+          </Button>
+        ) : (
+          <Link to={"/signin"}>
+            <Button variant="primary" className="rounded p-2">
+              Sign In
+            </Button>
+          </Link>
         )}
       </Container>
     </Navbarbs>
