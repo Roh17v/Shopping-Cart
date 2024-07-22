@@ -24,6 +24,7 @@ const StoreItem = ({ id, name, price, imgUrl }: StoreItemProps) => {
         height="200px"
         style={{ objectFit: "cover" }}
         variant="top"
+        loading="lazy"
       />
       <Card.Body className="d-flex flex-column">
         <Card.Title className="d-flex justify-content-between">

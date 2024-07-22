@@ -1,5 +1,7 @@
 import { Container } from "react-bootstrap";
 import { Route, Routes } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Navbar from "./components/Navbar";
 import { AuthProvider } from "./context/auth-context.js";
 import { ShoppingCartProvider } from "./context/ShoppingCartContext";
@@ -16,6 +18,7 @@ function App() {
         <ShoppingCartProvider>
           <Navbar />
           <Container>
+            <ToastContainer />
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/store" element={<Store />} />

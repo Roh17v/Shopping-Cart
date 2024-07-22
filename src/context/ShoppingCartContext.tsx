@@ -1,4 +1,5 @@
 import { ReactNode, createContext, useContext, useState } from "react";
+import { toast } from "react-toastify";
 import CartItem from "../components/CartItem";
 import ShoppingCart from "../components/ShoppingCart";
 import { useLocalStorage } from "../hooks/useLocalStorage";
@@ -17,7 +18,7 @@ type ShoppingCartContext = {
   cartQuantity: number;
   openCart: () => void;
   closeCart: () => void;
-  setCartItems: React.Dispatch<React.SetStateAction<CartItem[]>>
+  setCartItems: React.Dispatch<React.SetStateAction<CartItem[]>>;
 };
 
 type CartItem = {
@@ -46,7 +47,18 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
 
   function incrementItemQuantity(id: number) {
     if (!user) {
-      alert("you must be signed in before you can add items to cart");
+      toast.error(
+        "You must be signed in before you can add items to the cart",
+        {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        }
+      );
       return;
     }
     setCartItems((currItem) => {
@@ -62,10 +74,6 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
   }
 
   function decrementItemQuantity(id: number) {
-    if (!user) {
-      alert("you must be signed in before you can add items to cart");
-      return;
-    }
     setCartItems((currItem) => {
       if (currItem.find((item) => item.id === id) == null) {
         return currItem.filter((item) => item.id !== id);
@@ -79,10 +87,6 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
   }
 
   function removeFromCart(id: number) {
-    if (!user) {
-      alert("you must be signed in before you can add items to cart");
-      return;
-    }
     setCartItems((currItem) => {
       return currItem.filter((item) => item.id !== id);
     });
@@ -105,7 +109,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
         cartQuantity,
         closeCart,
         openCart,
-        setCartItems
+        setCartItems,
       }}
     >
       {children}
