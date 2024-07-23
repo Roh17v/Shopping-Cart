@@ -10,10 +10,10 @@ type ShoppingCartProviderProps = {
 };
 
 type ShoppingCartContext = {
-  getItemQuantity: (id: number) => number;
-  incrementItemQuantity: (id: number) => void;
-  decrementItemQuantity: (id: number) => void;
-  removeFromCart: (id: number) => void;
+  getItemQuantity: (id: string) => number;
+  incrementItemQuantity: (id: string) => void;
+  decrementItemQuantity: (id: string) => void;
+  removeFromCart: (id: string) => void;
   cartItems: CartItem[];
   cartQuantity: number;
   openCart: () => void;
@@ -22,7 +22,7 @@ type ShoppingCartContext = {
 };
 
 type CartItem = {
-  id: number;
+  id: string;
   quantity: number;
 };
 
@@ -34,18 +34,18 @@ export function useShoppingCart() {
 
 export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
   const [cartItems, setCartItems] = useLocalStorage<CartItem[]>(
-    "shopping-cart",
+    "shopping-cartss",
     []
   );
   const [isOpen, setIsopen] = useState(false);
 
   const { user } = useAuth();
 
-  function getItemQuantity(id: number) {
+  function getItemQuantity(id: string) {
     return cartItems.find((currItem) => currItem.id == id)?.quantity || 0;
   }
 
-  function incrementItemQuantity(id: number) {
+  function incrementItemQuantity(id: string) {
     if (!user) {
       toast.error(
         "You must be signed in before you can add items to the cart",
@@ -73,7 +73,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     });
   }
 
-  function decrementItemQuantity(id: number) {
+  function decrementItemQuantity(id: string) {
     setCartItems((currItem) => {
       if (currItem.find((item) => item.id === id) == null) {
         return currItem.filter((item) => item.id !== id);
@@ -86,7 +86,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     });
   }
 
-  function removeFromCart(id: number) {
+  function removeFromCart(id: string) {
     setCartItems((currItem) => {
       return currItem.filter((item) => item.id !== id);
     });

@@ -3,13 +3,13 @@ import { useShoppingCart } from "../context/ShoppingCartContext";
 import { currencyFormatter } from "../utilities/currencyFormatter";
 
 type StoreItemProps = {
-  id: number;
+  id: string;
   name: string;
   price: number;
-  imgUrl: string;
+  imageUrl: string;
 };
 
-const StoreItem = ({ id, name, price, imgUrl }: StoreItemProps) => {
+const StoreItem = ({ id, name, price, imageUrl }: StoreItemProps) => {
   const {
     getItemQuantity,
     incrementItemQuantity,
@@ -20,15 +20,26 @@ const StoreItem = ({ id, name, price, imgUrl }: StoreItemProps) => {
   return (
     <Card className="h-100">
       <Card.Img
-        src={imgUrl}
+        src={imageUrl}
         height="200px"
-        style={{ objectFit: "cover" }}
+        style={{ objectFit: "contain" }}
         variant="top"
         loading="lazy"
       />
       <Card.Body className="d-flex flex-column">
         <Card.Title className="d-flex justify-content-between">
-          <span className="fs-2">{name}</span>
+          <span
+            className="fs-4"
+            style={{
+              display: "-webkit-box",
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              WebkitLineClamp: 2,
+            }}
+          >
+            {name}
+          </span>
           <span className="text-muted my-auto">{currencyFormatter(price)}</span>
         </Card.Title>
         <div className="mt-auto">

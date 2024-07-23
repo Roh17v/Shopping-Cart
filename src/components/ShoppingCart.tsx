@@ -1,6 +1,6 @@
 import { Offcanvas, Stack } from "react-bootstrap";
+import { useProductContext } from "../context/Product-context";
 import { useShoppingCart } from "../context/ShoppingCartContext";
-import StoreItems from "../data/items.json";
 import { currencyFormatter } from "../utilities/currencyFormatter";
 import CartItem from "./CartItem";
 
@@ -9,9 +9,10 @@ type ShoppingCartProps = {
 };
 
 function ShoppingCart({ isOpen }: ShoppingCartProps) {
+  const { products } = useProductContext();
   const { closeCart, cartItems } = useShoppingCart();
   const totalPrice = cartItems.reduce((price, currItem) => {
-    const product = StoreItems.find((product) => product.id === currItem.id);
+    const product = products?.find((product) => product.id === currItem.id);
     return price + currItem.quantity * (product?.price || 0);
   }, 0);
   return (
