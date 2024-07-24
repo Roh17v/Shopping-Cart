@@ -6,7 +6,6 @@ function Store() {
   const { products } = useProductContext();
   return (
     <>
-      <h1>Store</h1>
       <Row md={2} xs={1} xl={3} className="g-3">
         {products?.map((item) => (
           <Col key={item.id}>

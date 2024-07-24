@@ -1,5 +1,5 @@
 import { Button, Container, Nav, Navbar as Navbarbs } from "react-bootstrap";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "../context/auth-context";
 import { useShoppingCart } from "../context/ShoppingCartContext";
 
@@ -7,18 +7,38 @@ function Navbar() {
   const { cartQuantity, openCart } = useShoppingCart();
   const { user, signOut } = useAuth();
   const { setCartItems } = useShoppingCart();
+  const location = useLocation();
+  const isActive = (path: string) => location.pathname === path;
 
   return (
     <Navbarbs sticky="top" className="bg-white shadow-sm mb-4" expand="lg">
       <Container>
         <Nav className="fs-4 me-auto">
-          <Nav.Link to={"/"} as={NavLink}>
+          <Nav.Link
+            to={"/"}
+            as={NavLink}
+            style={{
+              color: isActive("/") ? "#007bff" : "inherit",
+            }}
+          >
             Home
           </Nav.Link>
-          <Nav.Link to={"/store"} as={NavLink}>
+          <Nav.Link
+            to={"/store"}
+            as={NavLink}
+            style={{
+              color: isActive("/store") ? "#007bff" : "inherit",
+            }}
+          >
             Store
           </Nav.Link>
-          <Nav.Link to={"/about"} as={NavLink}>
+          <Nav.Link
+            to={"/about"}
+            as={NavLink}
+            style={{
+              color: isActive("/about") ? "#007bff" : "inherit",
+            }}
+          >
             About
           </Nav.Link>
         </Nav>

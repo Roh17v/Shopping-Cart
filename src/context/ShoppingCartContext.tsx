@@ -48,7 +48,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
   function incrementItemQuantity(id: string) {
     if (!user) {
       toast.error(
-        "You must be signed in before you can add items to the cart",
+        "You must be signed In before you can add items to the cart",
         {
           position: "top-right",
           autoClose: 3000,

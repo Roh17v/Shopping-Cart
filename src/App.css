@@ -40,3 +40,8 @@
 .read-the-docs {
   color: #888;
 }
+
+.nav-link.active {
+  color: #007bff; /* Bootstrap primary blue color */
+  font-weight: bold;
+}
