@@ -12,7 +12,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { auth, googleProvider } from "../firebase/firebase-config"; // Import the auth instance
+import { auth, googleProvider } from "../firebase/firebase-config"; 
 
 interface AuthContextType {
   user: User | null;
@@ -42,16 +42,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   const signIn = async (email: string, password: string) => {
-    await signInWithEmailAndPassword(auth, email, password); // Use imported method
+    await signInWithEmailAndPassword(auth, email, password); 
   };
 
   const signOut = async () => {
-    await firebaseSignOut(auth); // Use imported method
+    await firebaseSignOut(auth); 
     setUser(null);
   };
 
   const signInWithGoogle = async () => {
-    await signInWithPopup(auth, googleProvider); // Use imported method
+    await signInWithPopup(auth, googleProvider); 
   };
 
   return (

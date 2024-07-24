@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
+import { useAuth } from "../../context/auth-context";
 import { addProduct } from "../../utilities/firebase-utils";
 
 const AddProductForm: React.FC = () => {
@@ -7,19 +8,20 @@ const AddProductForm: React.FC = () => {
   const [price, setPrice] = useState<number | "">("");
   const [description, setDescription] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const { user } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (imageFile) {
+    if (imageFile && user) {
       const product = { name, price: Number(price), description, imageFile };
       await addProduct(product);
       setName("");
       setPrice("");
       setDescription("");
       setImageFile(null);
-      toast.success('Product added Successfully')
+      toast.success("Product added Successfully");
     } else {
-      alert("Please upload an image");
+      toast.error("You do not have the necessary permissions to add products.");
     }
   };
 
