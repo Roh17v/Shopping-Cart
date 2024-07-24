@@ -9,6 +9,7 @@ import { ShoppingCartProvider } from "./context/ShoppingCartContext";
 import About from "./pages/About/About";
 import AddProducts from "./pages/Add Products/AddProducts.tsx";
 import Home from "./pages/Home/Home";
+import NotFound from "./pages/NotFound/NotFound.tsx";
 import SignIn from "./pages/SignIn/SignIn.js";
 import SignUp from "./pages/SignUp/SignUp.jsx";
 import Store from "./pages/Store/Store";
@@ -29,6 +30,7 @@ function App() {
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/signin" element={<SignIn />} />
                 <Route path="/addproducts" element={<AddProducts />} />
+                <Route path="/*" element={<NotFound />} />
               </Routes>
             </Container>
           </ShoppingCartProvider>
