@@ -1,25 +1,28 @@
 import { ReactNode, createContext, useContext, useState } from "react";
+import { toast } from "react-toastify";
 import CartItem from "../components/CartItem";
 import ShoppingCart from "../components/ShoppingCart";
 import { useLocalStorage } from "../hooks/useLocalStorage";
+import { useAuth } from "./auth-context";
 
 type ShoppingCartProviderProps = {
   children: ReactNode;
 };
 
 type ShoppingCartContext = {
-  getItemQuantity: (id: number) => number;
-  incrementItemQuantity: (id: number) => void;
-  decrementItemQuantity: (id: number) => void;
-  removeFromCart: (id: number) => void;
+  getItemQuantity: (id: string) => number;
+  incrementItemQuantity: (id: string) => void;
+  decrementItemQuantity: (id: string) => void;
+  removeFromCart: (id: string) => void;
   cartItems: CartItem[];
   cartQuantity: number;
   openCart: () => void;
   closeCart: () => void;
+  setCartItems: React.Dispatch<React.SetStateAction<CartItem[]>>;
 };
 
 type CartItem = {
-  id: number;
+  id: string;
   quantity: number;
 };
 
@@ -31,16 +34,33 @@ export function useShoppingCart() {
 
 export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
   const [cartItems, setCartItems] = useLocalStorage<CartItem[]>(
-    "shopping-cart",
+    "shopping-cartss",
     []
   );
   const [isOpen, setIsopen] = useState(false);
 
-  function getItemQuantity(id: number) {
+  const { user } = useAuth();
+
+  function getItemQuantity(id: string) {
     return cartItems.find((currItem) => currItem.id == id)?.quantity || 0;
   }
 
-  function incrementItemQuantity(id: number) {
+  function incrementItemQuantity(id: string) {
+    if (!user) {
+      toast.error(
+        "You must be signed In before you can add items to the cart",
+        {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        }
+      );
+      return;
+    }
     setCartItems((currItem) => {
       if (currItem.find((item) => item.id === id) == null) {
         return [...currItem, { id, quantity: 1 }];
@@ -53,7 +73,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     });
   }
 
-  function decrementItemQuantity(id: number) {
+  function decrementItemQuantity(id: string) {
     setCartItems((currItem) => {
       if (currItem.find((item) => item.id === id) == null) {
         return currItem.filter((item) => item.id !== id);
@@ -66,7 +86,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     });
   }
 
-  function removeFromCart(id: number) {
+  function removeFromCart(id: string) {
     setCartItems((currItem) => {
       return currItem.filter((item) => item.id !== id);
     });
@@ -89,6 +109,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
         cartQuantity,
         closeCart,
         openCart,
+        setCartItems,
       }}
     >
       {children}
